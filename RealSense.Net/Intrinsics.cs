@@ -191,5 +191,96 @@ namespace RealSense.Net
         {
             return !left.Equals(right);
         }
+
+        /// <summary>
+        /// Computes the corresponding pixel coordinates of a point in 3D space, assuming an image with no distortion or
+        /// with forward distortion coefficients produced by the same camera.
+        /// </summary>
+        /// <param name="point">The 3D point to project into image space.</param>
+        /// <param name="intrinsics">The intrinsic parameters of the camera.</param>
+        /// <returns>The projected 2D point.</returns>
+        public static Vector2 ProjectPoint(Vector3 point, Intrinsics intrinsics)
+        {
+            Vector2 result;
+            ProjectPoint(ref point, ref intrinsics, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Computes the corresponding pixel coordinates of a point in 3D space, assuming an image with no distortion or
+        /// with forward distortion coefficients produced by the same camera.
+        /// </summary>
+        /// <param name="point">The 3D point to project into image space.</param>
+        /// <param name="intrinsics">The intrinsic parameters of the camera.</param>
+        /// <param name="result">The projected 2D point.</param>
+        public static void ProjectPoint(ref Vector3 point, ref Intrinsics intrinsics, out Vector2 result)
+        {
+            if (intrinsics.Model == Distortion.InverseBrownConrady || intrinsics.Model == Distortion.FTheta)
+            {
+                throw new ArgumentException("The specified intrinsics distortion model is not supported.", "intrinsics");
+            }
+
+            var x = point.X / point.Z;
+            var y = point.Y / point.Z;
+            if (intrinsics.Model == Distortion.ModifiedBrownConrady)
+            {
+                var r2 = x * x + y * y;
+                var f = 1 + intrinsics.Coeff0 * r2 + intrinsics.Coeff1 * r2 * r2 + intrinsics.Coeff4 * r2 * r2 * r2;
+                x *= f;
+                y *= f;
+                var dx = x + 2 * intrinsics.Coeff2 * x * y + intrinsics.Coeff3 * (r2 + 2 * x * x);
+                var dy = y + 2 * intrinsics.Coeff3 * x * y + intrinsics.Coeff2 * (r2 + 2 * y * y);
+                x = dx;
+                y = dy;
+            }
+            result.X = x * intrinsics.Fx + intrinsics.Ppx;
+            result.Y = y * intrinsics.Fy + intrinsics.Ppy;
+        }
+
+        /// <summary>
+        /// Computes the corresponding 3D coordinates of an image pixel with known depth, assuming an image with no distortion or
+        /// with inverse distortion coefficients produced by the same camera.
+        /// </summary>
+        /// <param name="pixel">The 2D point to project into 3D space.</param>
+        /// <param name="intrinsics">The intrinsic parameters of the camera.</param>
+        /// <param name="depth">The depth of the image pixel.</param>
+        /// <returns>The 3D coordinates of the 2D point relative to the camera.</returns>
+        public static Vector3 DeprojectPoint(Vector2 pixel, Intrinsics intrinsics, float depth)
+        {
+            Vector3 result;
+            DeprojectPoint(ref pixel, ref intrinsics, depth, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Computes the corresponding 3D coordinates of an image pixel with known depth, assuming an image with no distortion or
+        /// with inverse distortion coefficients produced by the same camera.
+        /// </summary>
+        /// <param name="pixel">The 2D point to project into 3D space.</param>
+        /// <param name="intrinsics">The intrinsic parameters of the camera.</param>
+        /// <param name="depth">The depth of the image pixel.</param>
+        /// <param name="result">The 3D coordinates of the 2D point relative to the camera.</param>
+        public static void DeprojectPoint(ref Vector2 pixel, ref Intrinsics intrinsics, float depth, out Vector3 result)
+        {
+            if (intrinsics.Model == Distortion.ModifiedBrownConrady || intrinsics.Model == Distortion.FTheta)
+            {
+                throw new ArgumentException("The specified intrinsics distortion model is not supported.", "intrinsics");
+            }
+
+            var x = (pixel.X - intrinsics.Ppx) / intrinsics.Fx;
+            var y = (pixel.Y - intrinsics.Ppy) / intrinsics.Fy;
+            if (intrinsics.Model == Distortion.InverseBrownConrady)
+            {
+                var r2 = x * x + y * y;
+                var f = 1 + intrinsics.Coeff0 * r2 + intrinsics.Coeff1 * r2 * r2 + intrinsics.Coeff4 * r2 * r2 * r2;
+                var ux = x * f + 2 * intrinsics.Coeff2 * x * y + intrinsics.Coeff3 * (r2 + 2 * x * x);
+                var uy = y * f + 2 * intrinsics.Coeff3 * x * y + intrinsics.Coeff2 * (r2 + 2 * y * y);
+                x = ux;
+                y = uy;
+            }
+            result.X = depth * x;
+            result.Y = depth * y;
+            result.Z = depth;
+        }
     }
 }

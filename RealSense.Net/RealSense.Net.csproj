@@ -71,6 +71,7 @@
     <Compile Include="StreamMode.cs" />
     <Compile Include="TimestampData.cs" />
     <Compile Include="Types.cs" />
+    <Compile Include="Vector2.cs" />
     <Compile Include="Vector3.cs" />
     <Compile Include="Version.cs" />
   </ItemGroup>

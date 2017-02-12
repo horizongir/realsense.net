@@ -113,5 +113,31 @@ namespace RealSense.Net
         {
             return !left.Equals(right);
         }
+
+        /// <summary>
+        /// Transforms 3D coordinates relative to one sensor into 3D coordinates relative to another viewpoint.
+        /// </summary>
+        /// <param name="point">The point to transform from.</param>
+        /// <param name="extrinsics">The extrinsic parameters defining the viewpoint transformation.</param>
+        /// <returns>The point coordinates in the new viewpoint coordinate frame.</returns>
+        public static Vector3 TransformPoint(Vector3 point, Extrinsics extrinsics)
+        {
+            Vector3 result;
+            TransformPoint(ref point, ref extrinsics, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Transforms 3D coordinates relative to one sensor into 3D coordinates relative to another viewpoint.
+        /// </summary>
+        /// <param name="point">The point to transform from.</param>
+        /// <param name="extrinsics">The extrinsic parameters defining the viewpoint transformation.</param>
+        /// <param name="result">The resulting point coordinates in the new viewpoint coordinate frame.</param>
+        public static void TransformPoint(ref Vector3 point, ref Extrinsics extrinsics, out Vector3 result)
+        {
+            result.X = extrinsics.Rotation.Column1.X * point.X + extrinsics.Rotation.Column2.X * point.Y + extrinsics.Rotation.Column3.X * point.Z + extrinsics.Translation.X;
+            result.Y = extrinsics.Rotation.Column1.Y * point.X + extrinsics.Rotation.Column2.Y * point.Y + extrinsics.Rotation.Column3.Y * point.Z + extrinsics.Translation.Y;
+            result.Z = extrinsics.Rotation.Column1.Z * point.X + extrinsics.Rotation.Column2.Z * point.Y + extrinsics.Rotation.Column3.Z * point.Z + extrinsics.Translation.Z;
+        }
     }
 }

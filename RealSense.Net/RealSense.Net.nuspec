@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://bitbucket.org/horizongir/realsense.net/raw/8f84bb963e62d5c9480b12660052f293aab7ec78/LICENSE</licenseUrl>
+    <projectUrl>https://bitbucket.org/horizongir/realsense.net</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <copyright>$author$ © 2017</copyright>
+    <tags>Intel RealSense Wrapper 3D Depth Camera</tags>
+  </metadata>
+  <files>
+    <file src="RealSense.Net.targets" target="build\net45"/>
+    <file src="..\Externals\RealSense\**" target="build\native\bin"/>
+  </files>
+</package>

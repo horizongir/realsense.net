@@ -960,4 +960,11 @@ namespace RealSense.Net
     /// </summary>
     /// <param name="entry">The timestamp data object.</param>
     public delegate void TimestampCallback(TimestampData entry);
+
+    /// <summary>
+    /// Represents the method that will be invoked whenever a new message needs to be logged.
+    /// </summary>
+    /// <param name="severity">The severity of the logged message.</param>
+    /// <param name="message">The message to be logged.</param>
+    public delegate void LogCallback(LogSeverity severity, string message);
 }

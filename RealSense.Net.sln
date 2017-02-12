@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Windows Desktop
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealSense.Net", "RealSense.Net\RealSense.Net.csproj", "{A00196CA-5F28-4FD1-BC8E-21F26CA56248}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A00196CA-5F28-4FD1-BC8E-21F26CA56248}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A00196CA-5F28-4FD1-BC8E-21F26CA56248}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A00196CA-5F28-4FD1-BC8E-21F26CA56248}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A00196CA-5F28-4FD1-BC8E-21F26CA56248}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

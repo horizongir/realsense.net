@@ -431,6 +431,7 @@ namespace RealSense.Net
             {
                 var frameHandle = new FrameHandle(frame);
                 onFrame(new Frame(frameHandle));
+                NativeMethods.rs_release_frame(handle, frameHandle, IntPtr.Zero);
             };
 
             NativeMethods.rs_set_frame_callback(handle, stream, callback, IntPtr.Zero, out error);

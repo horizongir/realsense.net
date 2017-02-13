@@ -248,7 +248,7 @@ namespace RealSense.Net.Native
         internal static extern IntPtr rs_get_frame_data(DeviceHandle device, Stream stream, out RsError error);
 
         [DllImport(libName, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void rs_release_frame(DeviceHandle device, FrameHandle frame, out RsError error);
+        internal static extern void rs_release_frame(DeviceHandle device, FrameHandle frame, IntPtr error);
 
         [DllImport(libName, CallingConvention = CallingConvention.Cdecl)]
         internal static extern double rs_get_detached_frame_timestamp(FrameHandle frame, out RsError error);

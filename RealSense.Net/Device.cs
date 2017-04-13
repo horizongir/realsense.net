@@ -615,13 +615,13 @@ namespace RealSense.Net
                 throw new ArgumentNullException("values");
             }
 
-            if (options.Length != values.Length)
+            if (options.Length < values.Length)
             {
-                throw new ArgumentException("The length of the array of option values must match the number of specified options to set.", "values");
+                throw new ArgumentException("The length of the array of options must match at least the number of specified values to set.", "options");
             }
 
             IntPtr error;
-            NativeMethods.rs_set_device_options(handle, options, (uint)options.Length, values, out error);
+            NativeMethods.rs_set_device_options(handle, options, (uint)values.Length, values, out error);
             NativeHelper.ThrowExceptionForRsError(error);
         }
 

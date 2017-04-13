@@ -580,7 +580,7 @@ namespace RealSense.Net
         /// <summary>
         /// Left-right threshold value for depth calculation.
         /// </summary>
-        R200DepthControlLrThreshold,
+        R200DepthControlLRThreshold,
 
         /// <summary>
         /// Fisheye image exposure time in msec.

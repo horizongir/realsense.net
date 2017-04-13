@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DevicePresets.cs" />
     <Compile Include="Frame.cs" />
     <Compile Include="Intrinsics.cs" />
     <Compile Include="Context.cs" />

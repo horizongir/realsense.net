@@ -233,6 +233,42 @@ namespace RealSense.Net
     }
 
     /// <summary>
+    /// Specifies recommended settings for depth control parameters in R200 devices.
+    /// </summary>
+    public enum DepthControlPreset
+    {
+        /// <summary>
+        /// Default settings on chip. Similar to the medium setting and best for outdoors.
+        /// </summary>
+        Default,
+
+        /// <summary>
+        /// Disable almost all hardware-based outlier removal.
+        /// </summary>
+        Off,
+
+        /// <summary>
+        /// Provide a depthmap with a lower number of outliers removed, which has minimal false negatives.
+        /// </summary>
+        Low,
+
+        /// <summary>
+        /// Provide a depthmap with a medium number of outliers removed, for a balanced approach.
+        /// </summary>
+        Medium,
+
+        /// <summary>
+        /// Provide a depthmap with a medium to high number of outliers removed. Derived from an optimization function.
+        /// </summary>
+        Optimized,
+
+        /// <summary>
+        /// Provide a depthmap with a higher number of outliers removed, which has minimal false positives.
+        /// </summary>
+        High
+    }
+
+    /// <summary>
     /// Specifies optimized settings for different types of usage in SR300 devices.
     /// </summary>
     public enum IVCamPreset

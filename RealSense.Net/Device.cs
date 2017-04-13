@@ -12,7 +12,7 @@ namespace RealSense.Net
     /// <summary>
     /// Represents a RealSense device session.
     /// </summary>
-    public class Device
+    public partial class Device
     {
         readonly DeviceHandle handle;
         readonly EventHandlerList callbacks;

@@ -123,8 +123,7 @@ namespace RealSense.Net
         /// <returns>The result of negating all the elements in the source matrix.</returns>
         public static Matrix3 Negate(Matrix3 value)
         {
-            Matrix3 result;
-            Negate(ref value, out result);
+            Negate(ref value, out Matrix3 result);
             return result;
         }
 
@@ -150,8 +149,7 @@ namespace RealSense.Net
         /// <returns>The sum of the two matrices.</returns>
         public static Matrix3 Add(Matrix3 value1, Matrix3 value2)
         {
-            Matrix3 result;
-            Add(ref value1, ref value2, out result);
+            Add(ref value1, ref value2, out Matrix3 result);
             return result;
         }
 
@@ -178,8 +176,7 @@ namespace RealSense.Net
         /// <returns>The result of the subtraction.</returns>
         public static Matrix3 Subtract(Matrix3 value1, Matrix3 value2)
         {
-            Matrix3 result;
-            Subtract(ref value1, ref value2, out result);
+            Subtract(ref value1, ref value2, out Matrix3 result);
             return result;
         }
 
@@ -206,8 +203,7 @@ namespace RealSense.Net
         /// <returns>The result of the multiplication.</returns>
         public static Matrix3 Multiply(Matrix3 value1, float value2)
         {
-            Matrix3 result;
-            Multiply(ref value1, value2, out result);
+            Multiply(ref value1, value2, out Matrix3 result);
             return result;
         }
 
@@ -234,8 +230,7 @@ namespace RealSense.Net
         /// <returns>The result of the multiplication.</returns>
         public static Matrix3 Multiply(Matrix3 value1, Matrix3 value2)
         {
-            Matrix3 result;
-            Multiply(ref value1, ref value2, out result);
+            Multiply(ref value1, ref value2, out Matrix3 result);
             return result;
         }
 
@@ -268,8 +263,7 @@ namespace RealSense.Net
         /// <returns>The result of the division.</returns>
         public static Matrix3 Divide(Matrix3 value1, float value2)
         {
-            Matrix3 result;
-            Divide(ref value1, value2, out result);
+            Divide(ref value1, value2, out Matrix3 result);
             return result;
         }
 
@@ -296,8 +290,7 @@ namespace RealSense.Net
         /// <returns>The result of the division.</returns>
         public static Matrix3 Divide(Matrix3 value1, Matrix3 value2)
         {
-            Matrix3 result;
-            Divide(ref value1, ref value2, out result);
+            Divide(ref value1, ref value2, out Matrix3 result);
             return result;
         }
 
@@ -360,8 +353,7 @@ namespace RealSense.Net
         /// <returns>The result of negating all the elements in the source matrix.</returns>
         public static Matrix3 operator -(Matrix3 value)
         {
-            Matrix3 result;
-            Negate(ref value, out result);
+            Negate(ref value, out Matrix3 result);
             return result;
         }
 
@@ -378,8 +370,7 @@ namespace RealSense.Net
         /// <returns>The sum of the two matrices.</returns>
         public static Matrix3 operator +(Matrix3 left, Matrix3 right)
         {
-            Matrix3 result;
-            Add(ref left, ref right, out result);
+            Add(ref left, ref right, out Matrix3 result);
             return result;
         }
 
@@ -396,8 +387,7 @@ namespace RealSense.Net
         /// <returns>The result of the subtraction.</returns>
         public static Matrix3 operator -(Matrix3 left, Matrix3 right)
         {
-            Matrix3 result;
-            Subtract(ref left, ref right, out result);
+            Subtract(ref left, ref right, out Matrix3 result);
             return result;
         }
 
@@ -414,8 +404,7 @@ namespace RealSense.Net
         /// <returns>The result of the multiplication.</returns>
         public static Matrix3 operator *(float left, Matrix3 right)
         {
-            Matrix3 result;
-            Multiply(ref right, left, out result);
+            Multiply(ref right, left, out Matrix3 result);
             return result;
         }
 
@@ -432,8 +421,7 @@ namespace RealSense.Net
         /// <returns>The result of the multiplication.</returns>
         public static Matrix3 operator *(Matrix3 left, float right)
         {
-            Matrix3 result;
-            Multiply(ref left, right, out result);
+            Multiply(ref left, right, out Matrix3 result);
             return result;
         }
 
@@ -450,8 +438,7 @@ namespace RealSense.Net
         /// <returns>The result of the multiplication.</returns>
         public static Matrix3 operator *(Matrix3 left, Matrix3 right)
         {
-            Matrix3 result;
-            Multiply(ref left, ref right, out result);
+            Multiply(ref left, ref right, out Matrix3 result);
             return result;
         }
 
@@ -468,8 +455,7 @@ namespace RealSense.Net
         /// <returns>The result of the division.</returns>
         public static Matrix3 operator /(Matrix3 left, float right)
         {
-            Matrix3 result;
-            Divide(ref left, right, out result);
+            Divide(ref left, right, out Matrix3 result);
             return result;
         }
 
@@ -486,8 +472,7 @@ namespace RealSense.Net
         /// <returns>The result of the division.</returns>
         public static Matrix3 operator /(Matrix3 left, Matrix3 right)
         {
-            Matrix3 result;
-            Divide(ref left, ref right, out result);
+            Divide(ref left, ref right, out Matrix3 result);
             return result;
         }
     }

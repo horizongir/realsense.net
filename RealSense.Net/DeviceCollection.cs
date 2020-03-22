@@ -8,36 +8,42 @@ using System.Threading.Tasks;
 namespace RealSense.Net
 {
     /// <summary>
-    /// Represents a collection of RealSense device sessions.
+    /// Represents a collection of connected RealSense devices.
     /// </summary>
-    public class DeviceCollection : IReadOnlyList<Device>
+    public class DeviceCollection : IReadOnlyCollection<Device>, IDisposable
     {
-        readonly ContextHandle handle;
+        readonly DeviceListHandle handle;
 
-        internal DeviceCollection(ContextHandle context)
+        internal DeviceCollection(DeviceListHandle deviceList)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-
-            handle = context;
+            handle = deviceList ?? throw new ArgumentNullException(nameof(deviceList));
         }
 
         /// <summary>
-        /// Gets the device at the specified index.
+        /// Determines whether the specified device is in the collection.
         /// </summary>
-        /// <param name="index">The zero-based index of the device to get.</param>
-        /// <returns>The device at the specified index.</returns>
-        public Device this[int index]
+        /// <param name="device">The device to locate in the collection.</param>
+        /// <returns>
+        /// <b>true</b> if the device is in the collection; otherwise, <b>false</b>.
+        /// </returns>
+        public bool Contains(Device device)
         {
-            get
-            {
-                IntPtr error;
-                var device = NativeMethods.rs_get_device(handle, index, out error);
-                NativeHelper.ThrowExceptionForRsError(error);
-                return new Device(device);
-            }
+            var result = NativeMethods.rs2_device_list_contains(handle, device.Handle, out IntPtr error);
+            NativeHelper.ThrowExceptionForRsError(error);
+            return result != 0;
+        }
+
+        /// <summary>
+        /// Opens a connection to the device with the specified index. The <see cref="Device"/> object
+        /// represents a handle to the connected device and provides the means to manipulate it.
+        /// </summary>
+        /// <param name="index">The zero-based index of the device to create.</param>
+        /// <returns>The requested disposable device handle.</returns>
+        public Device CreateDevice(int index)
+        {
+            var device = NativeMethods.rs2_create_device(handle, index, out IntPtr error);
+            NativeHelper.ThrowExceptionForRsError(error);
+            return new Device(device);
         }
 
         /// <summary>
@@ -47,8 +53,7 @@ namespace RealSense.Net
         {
             get
             {
-                IntPtr error;
-                var count = NativeMethods.rs_get_device_count(handle, out error);
+                var count = NativeMethods.rs2_get_device_count(handle, out IntPtr error);
                 NativeHelper.ThrowExceptionForRsError(error);
                 return count;
             }
@@ -65,13 +70,24 @@ namespace RealSense.Net
             var count = Count;
             for (int i = 0; i < count; i++)
             {
-                yield return this[i];
+                yield return CreateDevice(i);
             }
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        /// <summary>
+        /// Releases all resources held by the device collection instance.
+        /// </summary>
+        public void Dispose()
+        {
+            if (!handle.IsClosed)
+            {
+                handle.Close();
+            }
         }
     }
 }

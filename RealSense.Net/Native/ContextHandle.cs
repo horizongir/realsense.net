@@ -15,9 +15,7 @@ namespace RealSense.Net.Native
 
         protected override bool ReleaseHandle()
         {
-            IntPtr error;
-            NativeMethods.rs_delete_context(handle, out error);
-            if (error != IntPtr.Zero) NativeMethods.rs_free_error(error);
+            NativeMethods.rs2_delete_context(handle);
             return true;
         }
     }

@@ -8,8 +8,8 @@ namespace RealSense.Net
 {
     static class Version
     {
-        const int Major = 1;
-        const int Minor = 12;
+        const int Major = 2;
+        const int Minor = 33;
         const int Patch = 1;
 
         internal static int GetApiVersion()

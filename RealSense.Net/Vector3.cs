@@ -138,8 +138,7 @@ namespace RealSense.Net
         /// <returns>A vector pointing in the opposite direction of the source vector.</returns>
         public static Vector3 Negate(Vector3 value)
         {
-            Vector3 result;
-            Negate(ref value, out result);
+            Negate(ref value, out Vector3 result);
             return result;
         }
 
@@ -164,8 +163,7 @@ namespace RealSense.Net
         /// <returns>The sum of the two vectors.</returns>
         public static Vector3 Add(Vector3 value1, Vector3 value2)
         {
-            Vector3 result;
-            Add(ref value1, ref value2, out result);
+            Add(ref value1, ref value2, out Vector3 result);
             return result;
         }
 
@@ -191,8 +189,7 @@ namespace RealSense.Net
         /// <returns>The result of the subtraction.</returns>
         public static Vector3 Subtract(Vector3 value1, Vector3 value2)
         {
-            Vector3 result;
-            Subtract(ref value1, ref value2, out result);
+            Subtract(ref value1, ref value2, out Vector3 result);
             return result;
         }
 
@@ -219,8 +216,7 @@ namespace RealSense.Net
         /// <returns>The result of the multiplication.</returns>
         public static Vector3 Multiply(Vector3 value1, float value2)
         {
-            Vector3 result;
-            Multiply(ref value1, value2, out result);
+            Multiply(ref value1, value2, out Vector3 result);
             return result;
         }
 
@@ -247,8 +243,7 @@ namespace RealSense.Net
         /// <returns>The result of the multiplication.</returns>
         public static Vector3 Multiply(Vector3 value1, Vector3 value2)
         {
-            Vector3 result;
-            Multiply(ref value1, ref value2, out result);
+            Multiply(ref value1, ref value2, out Vector3 result);
             return result;
         }
 
@@ -275,8 +270,7 @@ namespace RealSense.Net
         /// <returns>The result of the division.</returns>
         public static Vector3 Divide(Vector3 value1, float value2)
         {
-            Vector3 result;
-            Divide(ref value1, value2, out result);
+            Divide(ref value1, value2, out Vector3 result);
             return result;
         }
 
@@ -303,8 +297,7 @@ namespace RealSense.Net
         /// <returns>The result of the division.</returns>
         public static Vector3 Divide(Vector3 value1, Vector3 value2)
         {
-            Vector3 result;
-            Divide(ref value1, ref value2, out result);
+            Divide(ref value1, ref value2, out Vector3 result);
             return result;
         }
 
@@ -330,8 +323,7 @@ namespace RealSense.Net
         /// <returns>The dot product of the two source vectors.</returns>
         public static float Dot(Vector3 value1, Vector3 value2)
         {
-            float result;
-            Dot(ref value1, ref value2, out result);
+            Dot(ref value1, ref value2, out float result);
             return result;
         }
 
@@ -391,8 +383,7 @@ namespace RealSense.Net
         /// <returns>A vector pointing in the opposite direction of the source vector.</returns>
         public static Vector3 operator -(Vector3 value)
         {
-            Vector3 result;
-            Negate(ref value, out result);
+            Negate(ref value, out Vector3 result);
             return result;
         }
 
@@ -408,8 +399,7 @@ namespace RealSense.Net
         /// <returns>The sum of the two vectors.</returns>
         public static Vector3 operator +(Vector3 left, Vector3 right)
         {
-            Vector3 result;
-            Add(ref left, ref right, out result);
+            Add(ref left, ref right, out Vector3 result);
             return result;
         }
 
@@ -426,8 +416,7 @@ namespace RealSense.Net
         /// <returns>The result of the subtraction.</returns>
         public static Vector3 operator -(Vector3 left, Vector3 right)
         {
-            Vector3 result;
-            Subtract(ref left, ref right, out result);
+            Subtract(ref left, ref right, out Vector3 result);
             return result;
         }
 
@@ -444,8 +433,7 @@ namespace RealSense.Net
         /// <returns>The result of the multiplication.</returns>
         public static Vector3 operator *(float left, Vector3 right)
         {
-            Vector3 result;
-            Multiply(ref right, left, out result);
+            Multiply(ref right, left, out Vector3 result);
             return result;
         }
 
@@ -462,8 +450,7 @@ namespace RealSense.Net
         /// <returns>The result of the multiplication.</returns>
         public static Vector3 operator *(Vector3 left, float right)
         {
-            Vector3 result;
-            Multiply(ref left, right, out result);
+            Multiply(ref left, right, out Vector3 result);
             return result;
         }
 
@@ -480,8 +467,7 @@ namespace RealSense.Net
         /// <returns>The result of the multiplication.</returns>
         public static Vector3 operator *(Vector3 left, Vector3 right)
         {
-            Vector3 result;
-            Multiply(ref left, ref right, out result);
+            Multiply(ref left, ref right, out Vector3 result);
             return result;
         }
 
@@ -498,8 +484,7 @@ namespace RealSense.Net
         /// <returns>The result of the division.</returns>
         public static Vector3 operator /(Vector3 left, float right)
         {
-            Vector3 result;
-            Divide(ref left, right, out result);
+            Divide(ref left, right, out Vector3 result);
             return result;
         }
 
@@ -516,8 +501,7 @@ namespace RealSense.Net
         /// <returns>The result of the division.</returns>
         public static Vector3 operator /(Vector3 left, Vector3 right)
         {
-            Vector3 result;
-            Divide(ref left, ref right, out result);
+            Divide(ref left, ref right, out Vector3 result);
             return result;
         }
     }

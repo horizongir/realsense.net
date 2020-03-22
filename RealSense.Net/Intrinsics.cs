@@ -201,8 +201,7 @@ namespace RealSense.Net
         /// <returns>The projected 2D point.</returns>
         public static Vector2 ProjectPoint(Vector3 point, Intrinsics intrinsics)
         {
-            Vector2 result;
-            ProjectPoint(ref point, ref intrinsics, out result);
+            ProjectPoint(ref point, ref intrinsics, out Vector2 result);
             return result;
         }
 
@@ -217,7 +216,7 @@ namespace RealSense.Net
         {
             if (intrinsics.Model == Distortion.InverseBrownConrady || intrinsics.Model == Distortion.FTheta)
             {
-                throw new ArgumentException("The specified intrinsics distortion model is not supported.", "intrinsics");
+                throw new ArgumentException("The specified intrinsics distortion model is not supported.", nameof(intrinsics));
             }
 
             var x = point.X / point.Z;
@@ -247,8 +246,7 @@ namespace RealSense.Net
         /// <returns>The 3D coordinates of the 2D point relative to the camera.</returns>
         public static Vector3 DeprojectPoint(Vector2 pixel, Intrinsics intrinsics, float depth)
         {
-            Vector3 result;
-            DeprojectPoint(ref pixel, ref intrinsics, depth, out result);
+            DeprojectPoint(ref pixel, ref intrinsics, depth, out Vector3 result);
             return result;
         }
 
@@ -264,7 +262,7 @@ namespace RealSense.Net
         {
             if (intrinsics.Model == Distortion.ModifiedBrownConrady || intrinsics.Model == Distortion.FTheta)
             {
-                throw new ArgumentException("The specified intrinsics distortion model is not supported.", "intrinsics");
+                throw new ArgumentException("The specified intrinsics distortion model is not supported.", nameof(intrinsics));
             }
 
             var x = (pixel.X - intrinsics.Ppx) / intrinsics.Fx;

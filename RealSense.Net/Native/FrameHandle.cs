@@ -9,13 +9,14 @@ namespace RealSense.Net.Native
     class FrameHandle : RsHandle
     {
         internal FrameHandle(IntPtr handle)
-            : base(false)
+            : base(true)
         {
             SetHandle(handle);
         }
 
         protected override bool ReleaseHandle()
         {
+            NativeMethods.rs2_release_frame(handle);
             return true;
         }
     }

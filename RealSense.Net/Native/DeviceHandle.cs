@@ -9,12 +9,13 @@ namespace RealSense.Net.Native
     class DeviceHandle : RsHandle
     {
         internal DeviceHandle()
-            : base(false)
+            : base(true)
         {
         }
 
         protected override bool ReleaseHandle()
         {
+            NativeMethods.rs2_delete_device(handle);
             return true;
         }
     }

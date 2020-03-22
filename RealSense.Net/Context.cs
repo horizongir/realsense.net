@@ -14,15 +14,12 @@ namespace RealSense.Net
     public class Context : IDisposable
     {
         readonly ContextHandle handle;
-        readonly DeviceCollection devices;
-        static NativeMethods.LogCallback logCallback;
+        NativeMethods.DevicesChangedCallback devicesChangedCallback;
 
         private Context(int version)
         {
-            IntPtr error;
-            handle = NativeMethods.rs_create_context(version, out error);
+            handle = NativeMethods.rs2_create_context(version, out IntPtr error);
             NativeHelper.ThrowExceptionForRsError(error);
-            devices = new DeviceCollection(handle);
         }
 
         /// <summary>
@@ -41,62 +38,57 @@ namespace RealSense.Net
         /// <returns>The API version encoded as an integer value.</returns>
         public static int GetApiVersion()
         {
-            IntPtr error;
-            var version = NativeMethods.rs_get_api_version(out error);
+            var version = NativeMethods.rs2_get_api_version(out IntPtr error);
             NativeHelper.ThrowExceptionForRsError(error);
             return version;
         }
 
         /// <summary>
-        /// Starts logging API notifications to the standard output.
+        /// Sets up a callback that is invoked whenever a new RealSense device is connected
+        /// or an existing device is disconnected.
         /// </summary>
-        /// <param name="minSeverity">The minimum severity of the messages to be logged.</param>
-        public static void LogToConsole(LogSeverity minSeverity)
+        /// <param name="callback">The function to be called whenever a device is connected or disconnected.</param>
+        public void SetDevicesChangedCallback(DevicesChangedCallback callback)
         {
-            IntPtr error;
-            NativeMethods.rs_log_to_console(minSeverity, out error);
-            NativeHelper.ThrowExceptionForRsError(error);
-        }
-
-        /// <summary>
-        /// Starts logging API notifications to a file.
-        /// </summary>
-        /// <param name="minSeverity">The minimum severity of the messages to be logged.</param>
-        /// <param name="filePath">The path of the file to log to.</param>
-        public static void LogToFile(LogSeverity minSeverity, string filePath)
-        {
-            IntPtr error;
-            NativeMethods.rs_log_to_file(minSeverity, filePath, out error);
-            NativeHelper.ThrowExceptionForRsError(error);
-        }
-
-        /// <summary>
-        /// Starts logging API notifications through a custom user callback.
-        /// </summary>
-        /// <param name="minSeverity">The minimum severity of the messages to be logged.</param>
-        /// <param name="onLog">The function that should be invoked whenever a new message needs to be logged.</param>
-        public static void LogToCallback(LogSeverity minSeverity, LogCallback onLog)
-        {
-            if (onLog == null)
+            if (callback == null)
             {
-                throw new ArgumentNullException("onLog");
+                throw new ArgumentNullException(nameof(callback));
             }
 
-            IntPtr error;
-            logCallback = (severity, message, user) =>
+            devicesChangedCallback = (removedListPtr, addedListPtr, user) =>
             {
-                onLog(severity, Marshal.PtrToStringAnsi(message));
+                var removedList = new DeviceListHandle(removedListPtr);
+                var addedList = new DeviceListHandle(addedListPtr);
+                using (var removed = new DeviceCollection(removedList))
+                using (var added = new DeviceCollection(addedList))
+                {
+                    callback(removed, added);
+                }
             };
-            NativeMethods.rs_log_to_callback(minSeverity, logCallback, IntPtr.Zero, out error);
+            NativeMethods.rs2_set_devices_changed_callback(handle, devicesChangedCallback, IntPtr.Zero, out IntPtr error);
             NativeHelper.ThrowExceptionForRsError(error);
         }
 
         /// <summary>
-        /// Gets the collection of connected RealSense devices.
+        /// Removes the tracking module from the context. If the tracking module is not used by this context it should
+        /// be removed using this method so that other applications can find it.
         /// </summary>
-        public DeviceCollection Devices
+        public void UnloadTrackingModule()
         {
-            get { return devices; }
+            NativeMethods.rs2_context_unload_tracking_module(handle, out IntPtr error);
+            NativeHelper.ThrowExceptionForRsError(error);
+        }
+
+        /// <summary>
+        /// Creates a static snapshot of all connected devices at the time of call.
+        /// </summary>
+        /// <param name="mask">An optional product mask controlling what kind of devices should be returned.</param>
+        /// <returns>The disposable collection of connected devices.</returns>
+        public DeviceCollection QueryDevices(ProductLines mask = ProductLines.AnyIntel)
+        {
+            var deviceList = NativeMethods.rs2_query_devices_ex(handle, mask, out IntPtr error);
+            NativeHelper.ThrowExceptionForRsError(error);
+            return new DeviceCollection(deviceList);
         }
 
         /// <summary>

@@ -14,15 +14,16 @@ namespace RealSense.Net
     {
         readonly FrameHandle handle;
 
-        internal Frame(FrameHandle frame)
+        internal Frame(FrameHandle frame, Sensor sensor)
         {
-            if (frame == null)
-            {
-                throw new ArgumentNullException("frame");
-            }
-
-            handle = frame;
+            handle = frame ?? throw new ArgumentNullException(nameof(frame));
+            Sensor = sensor;
         }
+
+        /// <summary>
+        /// Gets the sensor used to capture the frame.
+        /// </summary>
+        public Sensor Sensor { get; private set; }
 
         /// <summary>
         /// Gets the timestamp of the captured frame, in milliseconds since the device started.
@@ -31,8 +32,7 @@ namespace RealSense.Net
         {
             get
             {
-                IntPtr error;
-                var timestamp = NativeMethods.rs_get_detached_frame_timestamp(handle, out error);
+                var timestamp = NativeMethods.rs2_get_frame_timestamp(handle, out IntPtr error);
                 NativeHelper.ThrowExceptionForRsError(error);
                 return timestamp;
             }
@@ -45,8 +45,7 @@ namespace RealSense.Net
         {
             get
             {
-                IntPtr error;
-                var domain = NativeMethods.rs_get_detached_frame_timestamp_domain(handle, out error);
+                var domain = NativeMethods.rs2_get_frame_timestamp_domain(handle, out IntPtr error);
                 NativeHelper.ThrowExceptionForRsError(error);
                 return domain;
             }
@@ -55,126 +54,39 @@ namespace RealSense.Net
         /// <summary>
         /// Gets the frame number of the captured frame.
         /// </summary>
-        public ulong FrameNumber
+        public ulong Number
         {
             get
             {
-                IntPtr error;
-                var frameNumber = NativeMethods.rs_get_detached_frame_number(handle, out error);
+                var number = NativeMethods.rs2_get_frame_number(handle, out IntPtr error);
                 NativeHelper.ThrowExceptionForRsError(error);
-                return frameNumber;
+                return number;
+            }
+        }
+
+        /// <summary>
+        /// Gets the size of the captured frame content, in bytes.
+        /// </summary>
+        public int DataSize
+        {
+            get
+            {
+                var dataSize = NativeMethods.rs2_get_frame_data_size(handle, out IntPtr error);
+                NativeHelper.ThrowExceptionForRsError(error);
+                return dataSize;
             }
         }
 
         /// <summary>
         /// Gets a pointer to the contents of the captured frame.
         /// </summary>
-        public IntPtr FrameData
+        public IntPtr Data
         {
             get
             {
-                IntPtr error;
-                var frameData = NativeMethods.rs_get_detached_frame_data(handle, out error);
+                var data = NativeMethods.rs2_get_frame_data(handle, out IntPtr error);
                 NativeHelper.ThrowExceptionForRsError(error);
-                return frameData;
-            }
-        }
-
-        /// <summary>
-        /// Gets the width of the captured frame, in pixels.
-        /// </summary>
-        public int Width
-        {
-            get
-            {
-                IntPtr error;
-                var width = NativeMethods.rs_get_detached_frame_width(handle, out error);
-                NativeHelper.ThrowExceptionForRsError(error);
-                return width;
-            }
-        }
-
-        /// <summary>
-        /// Gets the height of the captured frame, in pixels.
-        /// </summary>
-        public int Height
-        {
-            get
-            {
-                IntPtr error;
-                var height = NativeMethods.rs_get_detached_frame_height(handle, out error);
-                NativeHelper.ThrowExceptionForRsError(error);
-                return height;
-            }
-        }
-
-        /// <summary>
-        /// Gets the framerate of the device stream which acquired the frame.
-        /// </summary>
-        public int Framerate
-        {
-            get
-            {
-                IntPtr error;
-                var framerate = NativeMethods.rs_get_detached_framerate(handle, out error);
-                NativeHelper.ThrowExceptionForRsError(error);
-                return framerate;
-            }
-        }
-
-        /// <summary>
-        /// Gets the total line width, in bytes, of the captured frame.
-        /// </summary>
-        public int Stride
-        {
-            get
-            {
-                IntPtr error;
-                var stride = NativeMethods.rs_get_detached_frame_stride(handle, out error);
-                NativeHelper.ThrowExceptionForRsError(error);
-                return stride;
-            }
-        }
-
-        /// <summary>
-        /// Gets the bits per pixel used by the captured frame format.
-        /// </summary>
-        public int BitsPerPixel
-        {
-            get
-            {
-                IntPtr error;
-                var bpp = NativeMethods.rs_get_detached_frame_bpp(handle, out error);
-                NativeHelper.ThrowExceptionForRsError(error);
-                return bpp;
-            }
-        }
-
-        /// <summary>
-        /// Gets the pixel format of the captured frame.
-        /// </summary>
-        public PixelFormat Format
-        {
-            get
-            {
-                IntPtr error;
-                var format = NativeMethods.rs_get_detached_frame_format(handle, out error);
-                NativeHelper.ThrowExceptionForRsError(error);
-                return format;
-            }
-        }
-
-        /// <summary>
-        /// Gets the type of the device stream which acquired the frame.
-        /// </summary>
-        public Stream StreamType
-        {
-            get
-            {
-                IntPtr error;
-                var stream = NativeMethods.rs_get_detached_frame_stream_type(handle, out error);
-                NativeHelper.ThrowExceptionForRsError(error);
-                return stream;
+                return data;
             }
         }
 
@@ -183,10 +95,9 @@ namespace RealSense.Net
         /// </summary>
         /// <param name="metadata">The metadata to retrieve from the captured frame.</param>
         /// <returns>The metadata value.</returns>
-        public double GetMetadata(FrameMetadata metadata)
+        public long GetMetadata(FrameMetadata metadata)
         {
-            IntPtr error;
-            var value = NativeMethods.rs_get_detached_frame_metadata(handle, metadata, out error);
+            var value = NativeMethods.rs2_get_frame_metadata(handle, metadata, out IntPtr error);
             NativeHelper.ThrowExceptionForRsError(error);
             return value;
         }
@@ -200,8 +111,31 @@ namespace RealSense.Net
         /// </returns>
         public bool SupportsMetadata(FrameMetadata metadata)
         {
-            IntPtr error;
-            var result = NativeMethods.rs_supports_frame_metadata(handle, metadata, out error);
+            var result = NativeMethods.rs2_supports_frame_metadata(handle, metadata, out IntPtr error);
+            NativeHelper.ThrowExceptionForRsError(error);
+            return result != 0;
+        }
+
+        /// <summary>
+        /// Removes the frame from the regular count of the frame pool, whenever you want to keep the frame
+        /// alive for longer. Once this method is called, the SDK can no longer guarantee zero-allocations
+        /// during frame cycling.
+        /// </summary>
+        public void Keep()
+        {
+            NativeMethods.rs2_keep_frame(handle);
+        }
+
+        /// <summary>
+        /// Tests whether the frame can be extended to the specified type.
+        /// </summary>
+        /// <param name="extension">The extension to check.</param>
+        /// <returns>
+        /// <b>true</b> if the frame can be extended to the specified extension; otherwise, <b>false</b>.
+        /// </returns>
+        public bool IsExtendableTo(Extension extension)
+        {
+            var result = NativeMethods.rs2_is_frame_extendable_to(handle, extension, out IntPtr error);
             NativeHelper.ThrowExceptionForRsError(error);
             return result != 0;
         }

@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Title>RealSense.NET</Title>
-    <Description>A .NET interface for the Intel RealSense cross-platform API.</Description>
+    <Description>A .NET interface for the Intel RealSense cross-platform API. RealSense SDK version 2.33.1 is required.</Description>
     <Authors>Gonçalo Lopes</Authors>
     <Copyright>Copyright © Gonçalo Lopes 2020</Copyright>
     <ProjectUrl>https://github.com/horizongir/realsense.net</ProjectUrl>
@@ -28,7 +28,14 @@
       <PackagePath>build</PackagePath>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
+  <ItemGroup Label="x64" Condition="'$(Platform.ToLower())' == 'x64' Or '$(Platform.ToLower())' == 'anycpu'">
+    <None Include="$(ProjectDir)../Externals/RealSense/x64/*.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup Label="x86" Condition="'$(Platform.ToLower())' == 'x86'">
+    <None Include="$(ProjectDir)../Externals/RealSense/x86/*.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
